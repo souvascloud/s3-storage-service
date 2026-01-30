@@ -263,18 +263,27 @@ All diagrams are provided in PlantUML format for downloadable image generation.
 
 ### System Architecture
 
+<img width="407" height="421" alt="system_arch" src="https://github.com/user-attachments/assets/d5c04145-1703-4aea-9255-d265f2ec234c" />
 
 
 ### Direct Upload Flow
 
+<img width="469" height="85" alt="direct_upload_flow" src="https://github.com/user-attachments/assets/4bc53a2c-7e73-440f-8e9a-67b398ff50a7" />
+
 
 ### Presigned Upload Flow
+
+<img width="395" height="230" alt="presigned_upload_flow" src="https://github.com/user-attachments/assets/1b53ba27-56fb-4570-a754-f5bf97c5e537" />
 
 
 ### Presigned Download Flow
 
+<img width="385" height="230" alt="presigned_download" src="https://github.com/user-attachments/assets/779e3dfc-c9bd-4cba-b1bb-fbaa4d3ecec6" />
+
 
 ### Sequence Diagram
+
+<img width="1579" height="3095" alt="app_sequnece_digram" src="https://github.com/user-attachments/assets/6a3ff5ed-6368-47e9-a3fa-9faffea4a4a3" />
 
 ---
 
@@ -347,6 +356,8 @@ Internal / Educational / Enterprise Architecture Reference
 ## Author
 
 Senior Software Engineer
+
 Passionate about backend systems, design, and clean code.
+
 LinkedIn: https://www.linkedin.com/in/souvanik-saha
 
