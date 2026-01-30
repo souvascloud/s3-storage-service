@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: s3-storage-service
+  servlet:
+    multipart:
+          max-file-size: ${MAX_FILE_SIZE}
+          max-request-size: ${MAX_REQUEST_SIZE}
+server:
+  port: ${SERVER_PORT}
+
+storage:
+  s3:
+    bucket-name: ${S3_BUCKET_NAME}
+    region: ${AWS_REGION}
+    base-path: ${S3_BASE_PATH}
+    presign-expiry-minutes: ${PRESIGN_EXPIRY_MINUTES}
+
+
+logging:
+  level:
+    root: ${LOG_ROOT_LEVEL:INFO}
+    com.example.storage: ${APP_LOG_LEVEL:DEBUG}
+    software.amazon.awssdk: ${AWS_SDK_LOG_LEVEL:WARN}
