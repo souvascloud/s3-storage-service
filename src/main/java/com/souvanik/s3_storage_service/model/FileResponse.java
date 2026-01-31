@@ -8,6 +8,14 @@ package com.souvanik.s3_storage_service.model;
  */
 public class FileResponse {
     private String key;
+
+    public FileResponse() {
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public FileResponse(String key) { this.key = key; }
     public String getKey() { return key; }
 }
