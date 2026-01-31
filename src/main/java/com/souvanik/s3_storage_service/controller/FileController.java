@@ -54,7 +54,7 @@ public class FileController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiSuccessResponse<FileResponse> upload(@Parameter(description = "File to upload", required = true)
+    public ResponseEntity<ApiSuccessResponse<FileResponse>> upload(@Parameter(description = "File to upload", required = true)
                                                        @RequestParam("file")  @NotNull(message = ApiMessages.FILE_REQUIRED) MultipartFile file) {
 
         if (file.isEmpty()) {
@@ -68,12 +68,12 @@ public class FileController {
 
         String key = storageService.upload(file);
 
-        return new ApiSuccessResponse<>(
+        return ResponseEntity.ok(new ApiSuccessResponse<>(
                 ApiMessages.SUCCESS,
                 ApiMessages.FILE_UPLOADED,
                 new FileResponse(key),
                 null
-        );
+        ));
     }
 
 
