@@ -1,5 +1,6 @@
 package com.souvanik.s3_storage_service.service;
 
+import com.souvanik.s3_storage_service.model.S3DownloadObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -12,5 +13,5 @@ import java.io.InputStream;
  */
 public interface FileStorageService {
     String upload(MultipartFile file);
-    InputStream download(String key);
+    S3DownloadObject download(String key);
 }

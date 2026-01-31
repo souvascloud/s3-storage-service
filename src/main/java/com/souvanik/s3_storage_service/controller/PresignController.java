@@ -1,13 +1,20 @@
 package com.souvanik.s3_storage_service.controller;
 
+import com.souvanik.s3_storage_service.common.api.ApiMessages;
+import com.souvanik.s3_storage_service.common.api.ApiPaths;
+import com.souvanik.s3_storage_service.common.api.SwaggerConstants;
 import com.souvanik.s3_storage_service.model.ApiSuccessResponse;
 import com.souvanik.s3_storage_service.model.PresignResponse;
+import com.souvanik.s3_storage_service.model.PresignUploadRequest;
+import com.souvanik.s3_storage_service.model.PresignUploadResult;
 import com.souvanik.s3_storage_service.service.PresignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -16,9 +23,12 @@ import org.springframework.web.bind.annotation.*;
  * Licensed under the MIT License.
  * https://opensource.org/licenses/MIT
  */
-@Tag(name = "Presigned APIs", description = "Presigned URL APIs (Client → S3 direct access)")
+@Tag(
+        name = SwaggerConstants.TAG_PRESIGN,
+        description = SwaggerConstants.TAG_PRESIGN_DESC
+)
 @RestController
-@RequestMapping("/api/v1/files/presign")
+@RequestMapping(ApiPaths.PRESIGN_BASE)
 public class PresignController {
 
     private final PresignService presignService;
@@ -28,44 +38,50 @@ public class PresignController {
     }
 
     @Operation(
-            summary = "Generate presigned upload URL",
-            description = "Generates a temporary PUT URL for direct client upload to S3",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Presigned upload URL generated"),
-                    @ApiResponse(responseCode = "500", description = "Failed to generate URL")
-            }
+            summary = SwaggerConstants.PRESIGN_UPLOAD_SUMMARY,
+            description = SwaggerConstants.PRESIGN_UPLOAD_DESC
     )
-    @PostMapping("/upload")
+    @PostMapping(
+            value = ApiPaths.UPLOAD,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiSuccessResponse<PresignResponse> presignUpload(
-            @Parameter(description = "Original file name", required = true)
-            @NotBlank(message = "fileName is required") String fileName) {
+            @Valid @RequestBody PresignUploadRequest request) {
 
-        if (fileName.contains("..") || fileName.contains("/")) {
-            throw new IllegalArgumentException("Invalid file name");
-        }
+        PresignUploadResult result =
+                presignService.generateUploadUrl(
+                        request.fileName(),
+                        request.contentType()
+                );
 
-        String url = presignService.generateUploadUrl(fileName);
-        return new ApiSuccessResponse<>("SUCCESS","Presigned upload URL",
-                new PresignResponse(url, null), null);
+        return new ApiSuccessResponse<>(
+                ApiMessages.SUCCESS,
+                ApiMessages.PRESIGNED_UPLOAD_URL,
+                new PresignResponse(result.url(), result.key()),
+                null
+        );
     }
 
 
 
     @Operation(
-            summary = "Generate presigned download URL",
-            description = "Generates a temporary GET URL for direct client download from S3",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Presigned download URL generated"),
-                    @ApiResponse(responseCode = "500", description = "Failed to generate URL")
-            }
+            summary = SwaggerConstants.PRESIGN_DOWNLOAD_SUMMARY,
+            description = SwaggerConstants.PRESIGN_DOWNLOAD_DESC
     )
-    @GetMapping("/download")
+    @GetMapping(
+            value = ApiPaths.DOWNLOAD,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiSuccessResponse<PresignResponse> presignDownload(
-            @Parameter(description = "S3 object key", required = true)
-            @NotBlank(message = "key is required") String key) {
+             @Valid @RequestParam("key") String key) {
 
         String url = presignService.generateDownloadUrl(key);
-        return new ApiSuccessResponse<>("SUCCESS","Presigned download URL",
-                new PresignResponse(url, key), null);
+
+        return new ApiSuccessResponse<>(
+                ApiMessages.SUCCESS,
+                ApiMessages.PRESIGNED_DOWNLOAD_URL,
+                new PresignResponse(url, key),
+                null
+        );
     }
 }

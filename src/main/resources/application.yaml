@@ -13,7 +13,7 @@ storage:
     bucket-name: ${S3_BUCKET_NAME}
     region: ${AWS_REGION}
     base-path: ${S3_BASE_PATH}
-    presign-expiry-minutes: ${PRESIGN_EXPIRY_MINUTES}
+    presign-expiry-minutes: ${PRESIGN_EXPIRY_MINUTES :10}
 
 
 logging:
