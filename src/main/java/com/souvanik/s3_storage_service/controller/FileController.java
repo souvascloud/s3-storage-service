@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +43,11 @@ public class FileController {
                     @ApiResponse(responseCode = "500", description = "Upload failed")
             }
     )
-    @PostMapping("/upload")
+    @PostMapping(
+            value = "/upload",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ApiSuccessResponse<FileResponse> upload(@Parameter(description = "File to upload", required = true)
                                                        @RequestParam("file")  @NotNull(message = "File is required") MultipartFile file) {
 
@@ -68,7 +73,10 @@ public class FileController {
                     @ApiResponse(responseCode = "404", description = "File not found")
             }
     )
-    @GetMapping("/download")
+    @GetMapping(
+            value = "/download",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
     public ResponseEntity<byte[]> download(
             @Parameter(description = "S3 object key", required = true)
             @RequestParam("key")  @NotBlank(message = "S3 key is required")  String key) throws Exception {
