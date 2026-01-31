@@ -68,12 +68,15 @@ public class FileController {
 
         String key = storageService.upload(file);
 
-        return ResponseEntity.ok(new ApiSuccessResponse<>(
-                ApiMessages.SUCCESS,
-                ApiMessages.FILE_UPLOADED,
-                new FileResponse(key),
-                null
-        ));
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ApiSuccessResponse<>(
+                        ApiMessages.SUCCESS,
+                        ApiMessages.FILE_UPLOADED,
+                        new FileResponse(key),
+                        null
+                ));
     }
 
 
